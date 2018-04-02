@@ -58,7 +58,7 @@ cp etc/nginx/conf/*.conf $BUILDPACK/nginx/conf
 # EOF
 #
 # cd $BUILD_DIR
-# PATH=$BUILD_DIR/$BUILDPACK/perl/bin:$PATH
+PATH=$BUILD_DIR/$BUILDPACK/node/bin:$PATH
 #
 # if [ -f 'cpanfile' ]; then
 #   MD5SUM=`md5sum cpanfile|awk '{print $1}'`
