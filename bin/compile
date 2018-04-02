@@ -42,20 +42,16 @@ cd $BUILD_DIR
 
 cp etc/nginx/conf/*.conf $BUILDPACK/nginx/conf
 
-# APACHE_DIR="$BUILDPACK/httpd"
-#
-# cat >>boot.sh <<EOF
-# sed -i 's/Listen 80/Listen '\$PORT'/' $APACHE_DIR/conf/httpd.conf
-# for var in \`env|cut -f1 -d=\`; do
-#   echo "PassEnv \$var" >> $APACHE_DIR/conf/httpd.conf;
-# done
-# touch $APACHE_DIR/logs/error_log
-# touch $APACHE_DIR/logs/access_log
-# tail -F $APACHE_DIR/logs/error_log &
-# tail -F $APACHE_DIR/logs/access_log &
-# echo "Launching Apache"
-# exec $APACHE_DIR/bin/httpd -DNO_DETACH
-# EOF
+NGINX_DIR="$BUILDPACK/nginx"
+
+cat >>boot.sh <<EOF
+touch $NGINX_DIR/logs/error.log
+touch $NGINX_DIR/logs/access.log
+tail -F $NGINX_DIR/logs/error.log &
+tail -F $NGINX_DIR/logs/access.log &
+echo "Launching Nginx"
+exec $NGINX_DIR/bin/nginx -g "daemon off;"
+EOF
 #
 # cd $BUILD_DIR
 PATH=$BUILD_DIR/$BUILDPACK/node/bin:$PATH
