@@ -80,3 +80,7 @@ cp etc/nginx/conf/*.conf $BUILDPACK/nginx/conf
 #     cp -r local/* $CARTON_CACHE/local
 #   fi
 # fi
+
+cd $BUILD_DIR
+HYDRA_ENV=prod
+make build
