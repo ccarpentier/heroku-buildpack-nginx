@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# bin/detect <build-dir>
+
+BUILD_DIR=$1
+
+if [ -f "$BUILD_DIR/index.pl" ]; then
+	echo "Apache/mod_perl2" && exit 0
+else
+	exit 1
+fi
