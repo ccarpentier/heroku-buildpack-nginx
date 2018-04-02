@@ -40,7 +40,7 @@ fi
 
 cd $BUILD_DIR
 
-cp etc/nginx/conf/*.conf $BUILDPACK/nginx/conf
+cp etc/nginx/conf.d/*.conf $BUILDPACK/nginx/conf.d
 
 NGINX_DIR="$BUILDPACK/nginx"
 
