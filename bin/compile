@@ -45,7 +45,7 @@ cp etc/nginx/conf/*.conf $BUILDPACK/nginx/conf
 NGINX_DIR="$BUILDPACK/nginx"
 
 cat >>boot.sh <<EOF
-sed -i 's/listen       80;/listen '\$PORT';/' $APACHE_DIR/conf/nginx.conf
+sed -i 's/listen       80;/listen '\$PORT';/' $NGINX_DIR/conf/nginx.conf
 touch $NGINX_DIR/logs/error.log
 touch $NGINX_DIR/logs/access.log
 tail -F $NGINX_DIR/logs/error.log &
