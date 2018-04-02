@@ -81,6 +81,6 @@ cp etc/nginx/conf/*.conf $BUILDPACK/nginx/conf
 #   fi
 # fi
 
-cd $BUILD_DIR
+cd $BUILD_DIR/hydra
 HYDRA_ENV=prod
 make build
