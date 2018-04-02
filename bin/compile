@@ -13,35 +13,35 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 
 BUILDPACK=".nginx-buildpack"
-# APACHE_BUNDLE="httpd_2.4.6-mod_perl_2.0.10.tar.gz"
-# APACHE_BUNDLE_URL="https://webassign.christop.io/${APACHE_BUNDLE}"
-#
-# cd $BUILD_DIR
-#
-# mkdir -p $BUILDPACK && cd $BUILDPACK
-#
-# TMP_BUILDPACK=$HOME/app/$BUILDPACK
-#
-# mkdir -p $TMP_BUILDPACK
-#
-# echo "-----> Bundling Nginx"
-#
-# if [ -d $CACHE_DIR/$BUILDPACK/httpd ]; then
-#   echo "--------> from Cache"
-#   cp -r $CACHE_DIR/$BUILDPACK/* .
-#   cp -r $CACHE_DIR/$BUILDPACK/* $TMP_BUILDPACK
-# else
-#   echo "--------> from Internet: $APACHE_BUNDLE_URL"
-#   curl --silent --max-time 60 --location $APACHE_BUNDLE_URL | tar -xz
-#   mkdir -p $CACHE_DIR/$BUILDPACK
-#   cp -r * $CACHE_DIR/$BUILDPACK
-#   cp -r $CACHE_DIR/$BUILDPACK/* $TMP_BUILDPACK
-# fi
-#
-# cd $BUILD_DIR
-#
-# cp etc/httpd/conf.d/*.conf $BUILDPACK/httpd/conf.d
-#
+NGINX="nginx-1.12.2.tar.gz"
+NGINX_BUNDLE_URL="https://webassign.christop.io/${APACHE_BUNDLE}"
+
+cd $BUILD_DIR
+
+mkdir -p $BUILDPACK && cd $BUILDPACK
+
+TMP_BUILDPACK=$HOME/app/$BUILDPACK
+
+mkdir -p $TMP_BUILDPACK
+
+echo "-----> Bundling Nginx"
+
+if [ -d $CACHE_DIR/$BUILDPACK/nginx ]; then
+  echo "--------> from Cache"
+  cp -r $CACHE_DIR/$BUILDPACK/* .
+  cp -r $CACHE_DIR/$BUILDPACK/* $TMP_BUILDPACK
+else
+  echo "--------> from Internet: $NGINX_BUNDLE_URL"
+  curl --silent --max-time 60 --location $NGINX_BUNDLE_URL | tar -xz
+  mkdir -p $CACHE_DIR/$BUILDPACK
+  cp -r * $CACHE_DIR/$BUILDPACK
+  cp -r $CACHE_DIR/$BUILDPACK/* $TMP_BUILDPACK
+fi
+
+cd $BUILD_DIR
+
+cp etc/nginx/conf/*.conf $BUILDPACK/nginx/conf
+
 # APACHE_DIR="$BUILDPACK/httpd"
 #
 # cat >>boot.sh <<EOF
