@@ -50,7 +50,7 @@ touch $NGINX_DIR/logs/access.log
 tail -F $NGINX_DIR/logs/error.log &
 tail -F $NGINX_DIR/logs/access.log &
 echo "Launching Nginx"
-exec $NGINX_DIR/bin/nginx -g "daemon off;"
+exec $NGINX_DIR/sbin/nginx -g "daemon off;"
 EOF
 #
 # cd $BUILD_DIR
