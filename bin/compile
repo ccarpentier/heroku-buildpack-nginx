@@ -12,71 +12,71 @@ shopt -s dotglob
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-BUILDPACK=".modperl2-buildpack"
-APACHE_BUNDLE="httpd_2.4.6-mod_perl_2.0.10.tar.gz"
-APACHE_BUNDLE_URL="https://webassign.christop.io/${APACHE_BUNDLE}"
-
-cd $BUILD_DIR
-
-mkdir -p $BUILDPACK && cd $BUILDPACK
-
-TMP_BUILDPACK=$HOME/app/$BUILDPACK
-
-mkdir -p $TMP_BUILDPACK
-
-echo "-----> Bundling Apache"
-
-if [ -d $CACHE_DIR/$BUILDPACK/httpd ]; then
-  echo "--------> from Cache"
-  cp -r $CACHE_DIR/$BUILDPACK/* .
-  cp -r $CACHE_DIR/$BUILDPACK/* $TMP_BUILDPACK
-else
-  echo "--------> from Internet: $APACHE_BUNDLE_URL"
-  curl --silent --max-time 60 --location $APACHE_BUNDLE_URL | tar -xz
-  mkdir -p $CACHE_DIR/$BUILDPACK
-  cp -r * $CACHE_DIR/$BUILDPACK
-  cp -r $CACHE_DIR/$BUILDPACK/* $TMP_BUILDPACK
-fi
-
-cd $BUILD_DIR
-
-cp etc/httpd/conf.d/*.conf $BUILDPACK/httpd/conf.d
-
-APACHE_DIR="$BUILDPACK/httpd"
-
-cat >>boot.sh <<EOF
-sed -i 's/Listen 80/Listen '\$PORT'/' $APACHE_DIR/conf/httpd.conf
-for var in \`env|cut -f1 -d=\`; do
-  echo "PassEnv \$var" >> $APACHE_DIR/conf/httpd.conf;
-done
-touch $APACHE_DIR/logs/error_log
-touch $APACHE_DIR/logs/access_log
-tail -F $APACHE_DIR/logs/error_log &
-tail -F $APACHE_DIR/logs/access_log &
-echo "Launching Apache"
-exec $APACHE_DIR/bin/httpd -DNO_DETACH
-EOF
-
-cd $BUILD_DIR
-PATH=$BUILD_DIR/$BUILDPACK/perl/bin:$PATH
-
-if [ -f 'cpanfile' ]; then
-  MD5SUM=`md5sum cpanfile|awk '{print $1}'`
-  echo "-----> Bundling Perl Modules"
-  CARTON_CACHE=$CACHE_DIR/carton
-  if [ -f $CARTON_CACHE/$MD5SUM ]; then
-    echo "--------> from Cache"
-    mkdir -p local
-    cp -r $CARTON_CACHE/local/* local
-  else
-    echo "--------> from Internet"
-    if [ -d $CARTON_CACHE ]; then
-      rm -fr $CARTON_CACHE
-    fi
-    mkdir $CARTON_CACHE
-    cp cpanfile $CARTON_CACHE/$MD5SUM
-    carton install
-    mkdir -p $CARTON_CACHE/local
-    cp -r local/* $CARTON_CACHE/local
-  fi
-fi
+BUILDPACK=".nginx-buildpack"
+# APACHE_BUNDLE="httpd_2.4.6-mod_perl_2.0.10.tar.gz"
+# APACHE_BUNDLE_URL="https://webassign.christop.io/${APACHE_BUNDLE}"
+#
+# cd $BUILD_DIR
+#
+# mkdir -p $BUILDPACK && cd $BUILDPACK
+#
+# TMP_BUILDPACK=$HOME/app/$BUILDPACK
+#
+# mkdir -p $TMP_BUILDPACK
+#
+# echo "-----> Bundling Nginx"
+#
+# if [ -d $CACHE_DIR/$BUILDPACK/httpd ]; then
+#   echo "--------> from Cache"
+#   cp -r $CACHE_DIR/$BUILDPACK/* .
+#   cp -r $CACHE_DIR/$BUILDPACK/* $TMP_BUILDPACK
+# else
+#   echo "--------> from Internet: $APACHE_BUNDLE_URL"
+#   curl --silent --max-time 60 --location $APACHE_BUNDLE_URL | tar -xz
+#   mkdir -p $CACHE_DIR/$BUILDPACK
+#   cp -r * $CACHE_DIR/$BUILDPACK
+#   cp -r $CACHE_DIR/$BUILDPACK/* $TMP_BUILDPACK
+# fi
+#
+# cd $BUILD_DIR
+#
+# cp etc/httpd/conf.d/*.conf $BUILDPACK/httpd/conf.d
+#
+# APACHE_DIR="$BUILDPACK/httpd"
+#
+# cat >>boot.sh <<EOF
+# sed -i 's/Listen 80/Listen '\$PORT'/' $APACHE_DIR/conf/httpd.conf
+# for var in \`env|cut -f1 -d=\`; do
+#   echo "PassEnv \$var" >> $APACHE_DIR/conf/httpd.conf;
+# done
+# touch $APACHE_DIR/logs/error_log
+# touch $APACHE_DIR/logs/access_log
+# tail -F $APACHE_DIR/logs/error_log &
+# tail -F $APACHE_DIR/logs/access_log &
+# echo "Launching Apache"
+# exec $APACHE_DIR/bin/httpd -DNO_DETACH
+# EOF
+#
+# cd $BUILD_DIR
+# PATH=$BUILD_DIR/$BUILDPACK/perl/bin:$PATH
+#
+# if [ -f 'cpanfile' ]; then
+#   MD5SUM=`md5sum cpanfile|awk '{print $1}'`
+#   echo "-----> Bundling Perl Modules"
+#   CARTON_CACHE=$CACHE_DIR/carton
+#   if [ -f $CARTON_CACHE/$MD5SUM ]; then
+#     echo "--------> from Cache"
+#     mkdir -p local
+#     cp -r $CARTON_CACHE/local/* local
+#   else
+#     echo "--------> from Internet"
+#     if [ -d $CARTON_CACHE ]; then
+#       rm -fr $CARTON_CACHE
+#     fi
+#     mkdir $CARTON_CACHE
+#     cp cpanfile $CARTON_CACHE/$MD5SUM
+#     carton install
+#     mkdir -p $CARTON_CACHE/local
+#     cp -r local/* $CARTON_CACHE/local
+#   fi
+# fi
