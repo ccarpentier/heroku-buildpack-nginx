@@ -13,8 +13,8 @@ BUILD_DIR=$1
 CACHE_DIR=$2
 
 BUILDPACK=".nginx-buildpack"
-NGINX="nginx-1.12.2.tar.gz"
-NGINX_BUNDLE_URL="https://webassign.christop.io/${APACHE_BUNDLE}"
+NGINX_BUNDLE="nginx-1.12.2.tar.gz"
+NGINX_BUNDLE_URL="https://webassign.christop.io/${NGINX_BUNDLE}"
 
 cd $BUILD_DIR
 
